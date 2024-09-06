@@ -6,7 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +30,6 @@ public class Student implements Serializable {
     @Column(name = "nameStudent", nullable = false, length = 100)
     private String name;
 
-
     private int age;
 
     @Temporal(TemporalType.DATE)
@@ -38,4 +41,17 @@ public class Student implements Serializable {
 
     @Column(nullable = false, unique = true)
     private String cpf;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Registration> registrations = new HashSet<>();
+
+    public void setBirthDate(String birthDate){
+        SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            sfd.setLenient(false);
+            this.birthDate = sfd.parse(birthDate);
+        }catch (ParseException e){
+            System.out.println("Formato de data inválido!!! [dd/MM/yyyy]");
+        }
+    }
 }

@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -27,4 +29,7 @@ public class Course implements Serializable {
 
     @Column(nullable = false)
     private String fullLoad;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ClassStudents> classStudents = new LinkedList<>();
 }
