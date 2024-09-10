@@ -3,10 +3,12 @@ package com.example.escolaIdiomas.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -31,8 +33,8 @@ public class Registration implements Serializable {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @Column(nullable = false)
-    private LocalDate dateRegistration;
+    @CreationTimestamp
+    private LocalDateTime dateRegistration;
 
 
 }

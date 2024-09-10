@@ -31,7 +31,7 @@ public class ClassStudents implements Serializable {
     private Set<Registration> registrations = new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "id_class_students")
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @ManyToOne

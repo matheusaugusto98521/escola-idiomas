@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,6 +40,27 @@ public class Teacher implements Serializable {
     @Column(length = 200, nullable = false)
     private String degree;
 
+    @Column(nullable = false)
+    private double availableHours;
+
+    @Temporal(TemporalType.DATE)
+    @Column(nullable = false)
+    private Date availableDate;
+
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ClassStudents> classStudents = new LinkedList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
+
+    public void setBirthDate(String birthDate){
+        SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy");
+        try{
+            sfd.setLenient(false);
+            this.birthDate = sfd.parse(birthDate);
+        }catch (ParseException e){
+            System.out.println("Formato de data inválido!!! [dd/MM/yyyy]");
+        }
+    }
 }
