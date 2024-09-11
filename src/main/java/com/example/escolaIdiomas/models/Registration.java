@@ -2,19 +2,21 @@ package com.example.escolaIdiomas.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_registrations")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Registration implements Serializable {
 
     @Serial
@@ -22,19 +24,17 @@ public class Registration implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "idRegistration")
     private UUID id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "class_id", nullable = false)
-    private ClassStudents classStudents;
-
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "student_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "id_students")
     private Student student;
 
+    @ManyToOne
+    @JoinColumn(name = "id_class_students")
+    private ClassStudents classStudents;
+
+    @Temporal(TemporalType.DATE)
     @CreationTimestamp
-    private LocalDateTime dateRegistration;
-
-
+    private Date registrationDate;
 }

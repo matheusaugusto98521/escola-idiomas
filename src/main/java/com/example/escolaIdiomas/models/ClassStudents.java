@@ -1,7 +1,9 @@
 package com.example.escolaIdiomas.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serial;
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Table(name = "tb_class_students")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ClassStudents implements Serializable {
 
     @Serial
@@ -28,6 +31,7 @@ public class ClassStudents implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "classStudents", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnore
     private Set<Registration> registrations = new HashSet<>();
 
     @ManyToOne
@@ -37,4 +41,5 @@ public class ClassStudents implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_teacher")
     private Teacher teacher;
+
 }

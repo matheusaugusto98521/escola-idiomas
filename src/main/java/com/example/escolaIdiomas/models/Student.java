@@ -1,7 +1,9 @@
 package com.example.escolaIdiomas.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serial;
@@ -17,6 +19,7 @@ import java.util.UUID;
 @Table(name = "tb_student")
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Student implements Serializable {
 
     @Serial
@@ -43,6 +46,7 @@ public class Student implements Serializable {
     private String cpf;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonIgnore
     private Set<Registration> registrations = new HashSet<>();
 
     public void setBirthDate(String birthDate){
@@ -53,5 +57,12 @@ public class Student implements Serializable {
         }catch (ParseException e){
             System.out.println("Formato de data inválido!!! [dd/MM/yyyy]");
         }
+    }
+
+    public void addClass(ClassStudents classStudents){
+        var registration = new Registration();
+        registration.setStudent(this);
+        registration.setClassStudents(classStudents);
+        registrations.add(registration);
     }
 }
