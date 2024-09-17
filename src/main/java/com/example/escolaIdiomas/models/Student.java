@@ -10,6 +10,8 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -64,5 +66,15 @@ public class Student implements Serializable {
         registration.setStudent(this);
         registration.setClassStudents(classStudents);
         registrations.add(registration);
+    }
+
+    public int calculateAge() {
+        LocalDate birthLocalDate = new java.sql.Date(birthDate.getTime()).toLocalDate();
+        return (int) ChronoUnit.YEARS.between(birthLocalDate, LocalDate.now());
+    }
+
+    @PostLoad
+    private void calculateAgeOnLoad(){
+        this.age = calculateAge();
     }
 }

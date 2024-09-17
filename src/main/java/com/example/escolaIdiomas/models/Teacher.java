@@ -1,5 +1,6 @@
 package com.example.escolaIdiomas.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,14 +41,15 @@ public class Teacher implements Serializable {
     @Column(length = 200, nullable = false)
     private String degree;
 
-    @Column(nullable = false)
-    private double availableHours;
+    /*@Column(nullable = false)
+    private double availableHours;*/
 
-    @Temporal(TemporalType.DATE)
+    /*@Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date availableDate;
+    private Date availableDate;*/
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<ClassStudents> classStudents = new LinkedList<>();
 
     @ManyToOne

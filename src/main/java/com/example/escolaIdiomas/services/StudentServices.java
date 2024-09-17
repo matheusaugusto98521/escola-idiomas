@@ -23,16 +23,19 @@ public class StudentServices {
     private IStudentRepository repository;
     private ClassStudentsServices classServices;
 
+    @Transactional
     public Student registerStudent(StudentRequestDTO data, UUID idClass) throws InvallidCredentialsException, ClassStudentsNotFoundException {
         var classFounded = this.classServices.getById(idClass);
         var student = new Student();
         if(data == null) throw new InvallidCredentialsException("Credenciais não podem ser nulas ou vazias");
         BeanUtils.copyProperties(data, student);
+        student.setAge(student.calculateAge());
         student.addClass(classFounded);
         this.classServices.saveClass(classFounded);
         return saveStudentBD(student);
     }
 
+    @Transactional
     public Student updateStudent(UUID idStudent, StudentRequestDTO data) throws StudentNotFoundException, InvallidCredentialsException {
         var foundedStudent = getStudentById(idStudent);
         if(data == null) throw new InvallidCredentialsException("Credenciais não podem ser nulas ou vazias");
@@ -40,9 +43,9 @@ public class StudentServices {
         return saveStudentBD(foundedStudent);
     }
 
-    public void deleteStudent(Student student) throws InvallidCredentialsException {
-        if(student == null) throw new InvallidCredentialsException("Credenciais não podem ser nulas ou vazias");
-        this.repository.delete(student);
+    public void deleteStudent(UUID idStudent) throws StudentNotFoundException {
+        var foundedStudent = getStudentById(idStudent);
+        this.repository.delete(foundedStudent);
     }
 
     public List<Student> getAll(){
@@ -53,14 +56,14 @@ public class StudentServices {
         return this.repository.findById(idStudent).orElseThrow(()
                 -> new StudentNotFoundException("Aluno não encontrado para o ID: " + idStudent));
     }
-    @Transactional
+
     private Student saveStudentBD(Student student) throws InvallidCredentialsException {
         if(student == null) throw new InvallidCredentialsException("Credenciais não podem ser nulas ou vazias");
         return this.repository.save(student);
 
     }
 
-    @Transactional
+
     public void saveStudent(Student student) throws InvallidCredentialsException {
         if(student == null) throw new InvallidCredentialsException("Credenciais não podem ser nulas ou vazias");
         this.repository.save(student);

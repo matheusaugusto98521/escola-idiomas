@@ -1,6 +1,7 @@
 package com.example.escolaIdiomas.services;
 
 import com.example.escolaIdiomas.models.Course;
+import com.example.escolaIdiomas.models.Teacher;
 import com.example.escolaIdiomas.models.dto.CourseRequestDTO;
 import com.example.escolaIdiomas.models.exceptions.CourseNotFoundException;
 import com.example.escolaIdiomas.models.exceptions.InvallidCredentialsException;
@@ -49,13 +50,18 @@ public class CourseServices {
                 -> new CourseNotFoundException("Curso não encontrado para o ID: " + idCourse));
     }
 
-    @Transactional
+    public List<Teacher> teachersByCourse(UUID idCourse) throws CourseNotFoundException {
+        var foundedCourse = getById(idCourse);
+        return foundedCourse.getTeachers();
+    }
+
+
     public void saveCourse(Course course) throws InvallidCredentialsException {
         if(course == null) throw new InvallidCredentialsException("Credenciais não podem ser nulas ou vazias");
         this.repository.save(course);
     }
 
-    @Transactional
+
     private Course saveCourseBD(Course course) throws InvallidCredentialsException {
         if(course == null) throw new InvallidCredentialsException("Credenciais não podem ser nulas ou vazias");
         return this.repository.save(course);
