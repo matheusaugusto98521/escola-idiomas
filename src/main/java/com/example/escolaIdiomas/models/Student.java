@@ -12,10 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_student")
@@ -47,9 +44,9 @@ public class Student implements Serializable {
     @Column(nullable = false, unique = true)
     private String cpf;
 
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
-    private Set<Registration> registrations = new HashSet<>();
+    private List<Registration> registrations = new LinkedList<>();
 
     public void setBirthDate(String birthDate){
         SimpleDateFormat sfd = new SimpleDateFormat("dd/MM/yyyy");

@@ -7,7 +7,7 @@ import com.example.escolaIdiomas.models.exceptions.ClassStudentsNotFoundExceptio
 import com.example.escolaIdiomas.models.exceptions.CourseNotFoundException;
 import com.example.escolaIdiomas.models.exceptions.InvallidCredentialsException;
 import com.example.escolaIdiomas.models.exceptions.TeacherNotFoundException;
-import com.example.escolaIdiomas.services.ClassStudentsServices;
+import com.example.escolaIdiomas.services.ClassServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public class ClassStudentsController {
 
     @Autowired
-    private ClassStudentsServices services;
+    private ClassServices services;
 
     @PostMapping("/register")
     public ResponseEntity<ClassStudents> register(@RequestBody @Valid ClassStudentsRequestDTO data,

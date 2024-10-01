@@ -1,6 +1,5 @@
 package com.example.escolaIdiomas.services;
 
-import com.example.escolaIdiomas.models.Registration;
 import com.example.escolaIdiomas.models.Student;
 import com.example.escolaIdiomas.models.dto.StudentRequestDTO;
 import com.example.escolaIdiomas.models.exceptions.ClassStudentsNotFoundException;
@@ -21,18 +20,20 @@ import java.util.UUID;
 public class StudentServices {
 
     private IStudentRepository repository;
-    private ClassStudentsServices classServices;
+    private ClassServices classServices;
+    private IRegistrationRepository registrationRepository;
 
     @Transactional
     public Student registerStudent(StudentRequestDTO data, UUID idClass) throws InvallidCredentialsException, ClassStudentsNotFoundException {
-        var classFounded = this.classServices.getById(idClass);
+        var classFounded = classServices.getById(idClass);
         var student = new Student();
         if(data == null) throw new InvallidCredentialsException("Credenciais não podem ser nulas ou vazias");
         BeanUtils.copyProperties(data, student);
         student.setAge(student.calculateAge());
         student.addClass(classFounded);
-        this.classServices.saveClass(classFounded);
-        return saveStudentBD(student);
+        saveStudent(student);
+        classServices.saveClass(classFounded);
+        return student;
     }
 
     @Transactional
@@ -45,6 +46,11 @@ public class StudentServices {
 
     public void deleteStudent(UUID idStudent) throws StudentNotFoundException {
         var foundedStudent = getStudentById(idStudent);
+        foundedStudent.getRegistrations().forEach(registration -> {
+            registration.setStudent(null);
+            registration.setClassStudents(null);
+            registrationRepository.delete(registration);
+        });
         this.repository.delete(foundedStudent);
     }
 

@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_class_students")
@@ -30,9 +28,9 @@ public class ClassStudents implements Serializable {
     @Column(length = 100, nullable = false)
     private String description;
 
-    @OneToMany(mappedBy = "classStudents", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "classStudents", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JsonIgnore
-    private Set<Registration> registrations = new HashSet<>();
+    private List<Registration> registrations = new LinkedList<>();
 
     @ManyToOne
     @JoinColumn(name = "course_id")

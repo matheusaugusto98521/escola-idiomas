@@ -14,13 +14,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ClassStudentsServices {
+public class ClassServices {
 
     private IClassStudentsRepository repository;
     private CourseServices courseServices;
@@ -63,10 +62,14 @@ public class ClassStudentsServices {
     }
 
     public List<Student> getStudentsByClass(UUID idClass) throws ClassStudentsNotFoundException {
-        var foundedClass = getById(idClass);
-        return foundedClass.getRegistrations().stream()
-                .map(Registration::getStudent)
-                .collect(Collectors.toList());
+        var foundedClass = getById(idClass); //resgatei a classe pelo id
+        List<Student> students = new ArrayList<>(); //nova lista para armazenar os alunos matriculados na turma resgatada
+        //forEach para iterar sobre todas as matrículas existentes na turma resgatada
+        foundedClass.getRegistrations().forEach(registration -> {
+            var student = registration.getStudent(); //pego o estudante da matricula[i]
+            students.add(student);//armazeno esse aluno na lista que criei acima
+        });
+        return students; //retorno essa lista, com os alunos encontrados
     }
 
 
